@@ -1,0 +1,119 @@
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+h3 {
+  color: #222;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999rem;
+  background-color: #bbb;
+  transform: translateX(-50%);
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+}
+
+.month-name {
+  font-size: 3rem;
+  letter-spacing: 0.2rem;
+  padding: 0.5rem;
+  color: #fff;
+  background-color: #000;
+  transform: translateX(-50%);
+  position: absolute;
+  left: 50%;
+  top: 12rem;
+}
+
+.month {
+  width: 80%;
+  /* margin: 0 auto;
+  margin-top: 22.5rem; */
+  text-align: center;
+  border-spacing: 0 0.5rem;
+  position: absolute;
+  top: 22.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.month tr {
+  height: 5rem;
+}
+
+/* ========== EVENTS ========== */
+.event {
+  position: relative;
+}
+
+.event-day {
+  color: #fff;
+  border-radius: 999rem;
+  line-height: 2rem;
+  display: inline-block;
+  width: 2rem;
+}
+
+.event-label {
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+  top: 2.5rem;
+  font-weight: normal;
+  width: 100%;
+}
+
+.off {
+  color: #ddd;
+}
+
+.red {
+  background-color: #c83737;
+}
+
+.green {
+  background-color: #3abe29;
+}
+
+.year {
+  font-weight: bold;
+  color: #808080;
+  letter-spacing: 0.25rem;
+  position: absolute;
+  transform: translateX(-50%);
+  bottom: 2rem;
+  left: 50%;
+}
+
+td {
+  vertical-align: text-top;
+  font-weight: bold;
+  border-bottom: 1px solid #eee;
+  width: 14.285%;
+}
+
+tr {
+  margin-bottom: 5rem;
+}
+
+.options {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  background-color: #fff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: inline-block;
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 200;
+  widows: 40rem;
+}
+
+.col-6 {
+  width: 40%;
+  display: inline-block;
+}
