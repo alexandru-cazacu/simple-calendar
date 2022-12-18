@@ -1,3 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./theme/icons";
+@import "./theme/paper";
+
+@page {
+  size: A4;
+}
+
 * {
   font-family: "Roboto", sans-serif;
 }
@@ -65,6 +78,7 @@ h3 {
   top: 2.5rem;
   font-weight: normal;
   width: 100%;
+  line-height: 1rem;
 }
 
 .off {
@@ -101,7 +115,7 @@ tr {
 }
 
 .options {
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   background-color: #fff;
   border-radius: 0.5rem;
   padding: 1rem;
@@ -110,10 +124,16 @@ tr {
   right: 1rem;
   bottom: 1rem;
   z-index: 200;
-  widows: 40rem;
+  width: 30rem;
 }
 
 .col-6 {
   width: 40%;
   display: inline-block;
+}
+
+@media print {
+  .noprint {
+    visibility: hidden;
+  }
 }

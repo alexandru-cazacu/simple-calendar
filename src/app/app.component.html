@@ -1,0 +1,139 @@
+<div class="options noprint">
+  <div class="space-y-2">
+    <div>Options</div>
+
+    <label for="location" class="block text-sm font-medium text-gray-700">Year</label>
+    <select
+      id="location"
+      name="location"
+      class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+    >
+      <option selected>2022</option>
+    </select>
+
+    <label for="location" class="block text-sm font-medium text-gray-700">Language</label>
+    <select
+      id="location"
+      name="location"
+      class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm"
+    >
+      <option selected>Italian</option>
+      <option>English</option>
+    </select>
+
+    <div>Events</div>
+
+    <ul id="events">
+      <li *ngFor="let event of events; let i = index">
+        <div class="grid grid-cols-3">
+          <span>{{ event.name }}</span>
+          <span>{{ event.date | date }}</span>
+          <button (click)="deleteEvent(i)">Delete</button>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Separator -->
+    <div class="relative">
+      <div class="absolute inset-0 flex items-center" aria-hidden="true">
+        <div class="w-full border-t border-gray-300"></div>
+      </div>
+    </div>
+
+    <div>New event</div>
+
+    <form [formGroup]="form">
+      <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+      <div class="mt-1">
+        <input
+          formControlName="name"
+          type="text"
+          name="name"
+          id="name"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          placeholder="Event name"
+        />
+      </div>
+
+      <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+      <div class="mt-1">
+        <input
+          formControlName="dateControl"
+          type="date"
+          name="date"
+          id="date"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+        />
+      </div>
+
+      <label for="color" class="block text-sm font-medium text-gray-700">Color</label>
+      <div class="mt-1">
+        <input
+          formControlName="color"
+          type="color"
+          name="color"
+          id="color"
+          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+        />
+      </div>
+    </form>
+
+    <button
+      (click)="addEvent()"
+      class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+    >
+      Add Event
+    </button>
+
+    <!-- Separator -->
+    <div class="relative">
+      <div class="absolute inset-0 flex items-center" aria-hidden="true">
+        <div class="w-full border-t border-gray-300"></div>
+      </div>
+    </div>
+
+    <button
+      (click)="print()"
+      class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+    >
+      Generate
+    </button>
+  </div>
+</div>
+
+<div id="pages" *ngFor="let month of calendar">
+  <section class="sheet">
+    <span class="month-name">{{ month.name }}</span>
+    <span class="year">{{ initialDate.getFullYear() }}</span>
+
+    <table [cellSpacing]="0" class="month">
+      <tbody>
+        <tr>
+          <td *ngFor="let day of days">{{ day }}</td>
+        </tr>
+        <tr *ngFor="let row of month.rows">
+          <td
+            *ngFor="let col of row.cols"
+            [class.event]="col.eventName || col.holidayName"
+            [class.off]="col.otherMonth"
+          >
+            <span
+              *ngIf="!col.otherMonth"
+              [class.green]="col.eventName"
+              [class.red]="col.isSunday || col.holidayName"
+              [class.event-day]="col.isSunday || col.eventName || col.holidayName"
+              [ngStyle]="{ 'background-color': col.event?.color }"
+            >
+              {{ col.number }}
+            </span>
+            <span *ngIf="col.otherMonth">
+              {{ col.number }}
+            </span>
+            <span class="event-label" *ngIf="!col.otherMonth">{{ col.eventName }}</span>
+            <span class="event-label" *ngIf="!col.otherMonth">{{ col.holidayName }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
