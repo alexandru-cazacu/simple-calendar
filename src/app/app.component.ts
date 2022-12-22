@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 interface CalendarEvent {
@@ -45,54 +45,58 @@ const MONTHS = {
   ],
 };
 
-const HOLIDAYS = [
+const FIXED_HOLIDAYS = [
   {
     name: 'Capodanno',
-    date: new Date('01/01/2022'),
+    date: new Date('2023-01-01'),
   },
   {
     name: 'Epifania',
-    date: new Date('01/06/2022'),
-  },
-  {
-    name: 'Pasqua',
-    date: new Date('04/12/2022'),
-  },
-  {
-    name: 'Lunedì di Pasquetta',
-    date: new Date('04/13/2022'),
+    date: new Date('2023-01-06'),
   },
   {
     name: 'Liberazione',
-    date: new Date('04/25/2022'),
+    date: new Date('2023-04-25'),
   },
   {
     name: 'Festa del Lavoro',
-    date: new Date('05/01/2022'),
+    date: new Date('2023-05-01'),
   },
   {
     name: 'Festa della Repubblica',
-    date: new Date('06/02/2022'),
+    date: new Date('2023-06-02'),
   },
   {
     name: 'Ferragosto',
-    date: new Date('08/15/2022'),
+    date: new Date('2023-08-15'),
   },
   {
     name: 'Tutti i Santi',
-    date: new Date('11/01/2022'),
+    date: new Date('2023-11-01'),
   },
   {
     name: 'Immacolata',
-    date: new Date('12/08/2022'),
+    date: new Date('2023-12-08'),
   },
   {
     name: 'Natale',
-    date: new Date('12/25/2022'),
+    date: new Date('2023-12-25'),
   },
   {
     name: 'Santo Stefano',
-    date: new Date('12/26/2022'),
+    date: new Date('2023-12-26'),
+  },
+];
+
+// TODO implement dynamic calculation
+const MOVING_HOLIDAYS = [
+  {
+    name: 'Pasqua',
+    date: new Date('2023-04-09'),
+  },
+  {
+    name: 'Lunedì di Pasquetta',
+    date: new Date('2023-04-10'),
   },
 ];
 
@@ -123,7 +127,7 @@ export class AppComponent implements OnInit {
   locale = 'it';
   days = DAYS['it'];
   months = MONTHS['it'];
-  initialDate: Date = new Date(`01/01/2022`);
+  initialDate: Date = new Date(`01/01/2023`);
 
   events: CalendarEvent[] = [];
   calendar: Calendar = [];
@@ -134,19 +138,24 @@ export class AppComponent implements OnInit {
       nonNullable: true,
       validators: [Validators.required],
     }),
-    color: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    color: new FormControl<string>('#3abe29', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
+
+  @ViewChild('pages') pages?: ElementRef<HTMLElement>;
 
   constructor() {}
 
   ngOnInit() {
-    this.initialDate = new Date(`01/01/2022`);
+    this.initialDate = new Date(`01/01/2023`);
 
     this.restoreState();
     this.updateCalendar();
   }
 
-  private isSameDay(first: Date, second: Date) {
+  private isSameDate(first: Date, second: Date) {
     return (
       first.getFullYear() === second.getFullYear() &&
       first.getMonth() === second.getMonth() &&
@@ -154,8 +163,14 @@ export class AppComponent implements OnInit {
     );
   }
 
+  private isSameDayMonth(first: Date, second: Date) {
+    return first.getMonth() === second.getMonth() && first.getDate() === second.getDate();
+  }
+
   public print() {
     window.print();
+
+    // this.printElem();
   }
 
   public addEvent() {
@@ -237,13 +252,18 @@ export class AppComponent implements OnInit {
           }
 
           // Giorno festivo
-          const holiday = HOLIDAYS.find((value) => this.isSameDay(value.date, date));
+          const holiday = FIXED_HOLIDAYS.find((value) => this.isSameDate(value.date, date));
           if (holiday) {
             day.holidayName = holiday.name;
           }
 
+          const movingHoliday = MOVING_HOLIDAYS.find((value) => this.isSameDate(value.date, date));
+          if (movingHoliday) {
+            day.holidayName = movingHoliday.name;
+          }
+
           // Evento
-          const event = this.events.find((value) => this.isSameDay(value.date, date));
+          const event = this.events.find((value) => this.isSameDayMonth(value.date, date));
           if (event) {
             day.eventName = event.name;
             day.event = event;
@@ -266,5 +286,32 @@ export class AppComponent implements OnInit {
 
   public isFieldValid(field: string) {
     return !this.form.get(field)?.valid && this.form.get(field)?.touched;
+  }
+
+  public printElem() {
+    const mywindow = window.open('', 'PRINT');
+
+    mywindow?.document.write(`<html><head><title>${document.title}</title>`);
+    mywindow?.document.write('<link rel="stylesheet" href="styles.css">');
+    mywindow?.document.write('</head><body class="A4">');
+    mywindow?.document.write(this.pages?.nativeElement.innerHTML || '');
+    mywindow?.document.write(`<style>@page { size: A4 }
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      body {
+        min-width: initial !important;
+      }
+    </style>`);
+    mywindow?.document.write('</body></html>');
+
+    mywindow?.document.close(); // necessary for IE >= 10
+    mywindow?.focus(); // necessary for IE >= 10*/
+
+    mywindow?.print();
+    // mywindow?.close();
+
+    return true;
   }
 }

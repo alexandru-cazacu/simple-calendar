@@ -4,24 +4,15 @@
       <div>
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">Options</h3>
-          <!-- <p class="mt-1 text-sm text-gray-500">This information will be displayed publicly so be careful what you share.</p> -->
         </div>
 
         <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-          <div class="sm:col-span-2">
-            <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
-            <div class="mt-1">
-              <select id="country" name="country" autocomplete="country" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                <option>Italy</option>
-              </select>
-            </div>
-          </div>
 
           <div class="sm:col-span-2">
             <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
             <div class="mt-1">
               <select id="year" name="year" autocomplete="year" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                <option>2022</option>
+                <option>2023</option>
               </select>
             </div>
           </div>
@@ -41,15 +32,22 @@
       <div class="pt-8">
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">Events</h3>
-          <!-- <p class="mt-1 text-sm text-gray-500">Use a permanent address where you can receive mail.</p> -->
         </div>
         <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <ul id="events" class="sm:col-span-6">
+            <li>
+              <div class="grid grid-cols-4">
+                <span>Event</span>
+                <span>Date</span>
+                <span>Color</span>
+              </div>
+            </li>
             <li *ngFor="let event of events; let i = index">
-              <div class="grid grid-cols-3">
+              <div class="grid grid-cols-4">
                 <span>{{ event.name }}</span>
                 <span>{{ event.date | date }}</span>
-                <button (click)="deleteEvent(i)">Delete</button>
+                <span [ngStyle]="{'background-color': event.color}" class="rounded-full w-4 h-4"></span>
+                <button (click)="deleteEvent(i)" >Delete</button>
               </div>
             </li>
           </ul>
@@ -59,7 +57,6 @@
       <div class="pt-8">
         <div>
           <h3 class="text-lg font-medium leading-6 text-gray-900">Add Event</h3>
-          <!-- <p class="mt-1 text-sm text-gray-500">Use a permanent address where you can receive mail.</p> -->
         </div>
         <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div class="sm:col-span-6">
@@ -104,8 +101,8 @@
   </form>
 </div>
 
-<div id="pages" *ngFor="let month of calendar">
-  <section class="sheet">
+<section class="sheet" *ngFor="let month of calendar">
+  <div class="month-container">
     <span class="month-name">{{ month.name }}</span>
     <span class="year">{{ initialDate.getFullYear() }}</span>
 
@@ -138,5 +135,5 @@
         </tr>
       </tbody>
     </table>
-  </section>
-</div>
+  </div>
+</section>
