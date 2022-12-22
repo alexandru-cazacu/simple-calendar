@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 interface CalendarEvent {
   name: string;
@@ -96,25 +96,6 @@ const HOLIDAYS = [
   },
 ];
 
-// let events: CalendarEvent[] = [
-//   {
-//     name: 'Compleanno Mama',
-//     date: new Date('03/26/2022'),
-//   },
-//   {
-//     name: 'Compleanno Alex',
-//     date: new Date('06/08/2022'),
-//   },
-//   {
-//     name: 'Compleanno Vitalie',
-//     date: new Date('06/16/2022'),
-//   },
-//   {
-//     name: 'Compleanno Aurora',
-//     date: new Date('07/24/2022'),
-//   },
-// ];
-
 type Day = {
   number?: number;
   isSunday?: boolean;
@@ -148,17 +129,21 @@ export class AppComponent implements OnInit {
   calendar: Calendar = [];
 
   form = new FormGroup({
-    name: new FormControl<string>('', { nonNullable: true }),
-    dateControl: new FormControl<Date>(new Date(), { nonNullable: true }),
-    color: new FormControl<string>('', { nonNullable: true }),
+    name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    dateControl: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    color: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
   });
+
+  constructor() {}
 
   ngOnInit() {
     this.initialDate = new Date(`01/01/2022`);
 
     this.restoreState();
     this.updateCalendar();
-    this.updateEvents();
   }
 
   private isSameDay(first: Date, second: Date) {
@@ -174,16 +159,24 @@ export class AppComponent implements OnInit {
   }
 
   public addEvent() {
-    this.events.push({
-      name: this.form.controls.name.value,
-      date: this.form.controls.dateControl.value,
-      color: this.form.controls.color.value,
-    });
+    if (this.form.valid) {
+      this.events.push({
+        name: this.form.controls.name.value,
+        date: new Date(this.form.controls.dateControl.value),
+        color: this.form.controls.color.value,
+      });
 
-    window.localStorage.setItem('save', JSON.stringify(this.events));
+      this.form.reset();
 
-    this.updateCalendar();
-    this.updateEvents();
+      window.localStorage.setItem('save', JSON.stringify(this.events));
+
+      this.updateCalendar();
+    } else {
+      Object.keys(this.form.controls).forEach((field) => {
+        const control = this.form.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+    }
   }
 
   public deleteEvent(index: number) {
@@ -192,26 +185,6 @@ export class AppComponent implements OnInit {
     window.localStorage.setItem('save', JSON.stringify(this.events));
 
     this.updateCalendar();
-    this.updateEvents();
-  }
-
-  private updateEvents() {
-    // const container = document.getElementById('events');
-    // container.innerHTML = '';
-    // for (let i = 0; i < events.length; i++) {
-    //   const event = events[i];
-    //   const date = event.date.toLocaleDateString();
-    //   container?.appendChild(
-    //     `<li>${event.name} - ${date} <button id="btn-event-${i}">Del</button></li>`
-    //   );
-    //   document
-    //     .getElementById(`btn-event-${i}`)
-    //     ?.addEventListener('click', () => {
-    //       events = events.filter((v, idx) => idx !== i);
-    //       console.log(events);
-    //       this.updateEvents();
-    //     });
-    // }
   }
 
   private restoreState() {
@@ -289,5 +262,9 @@ export class AppComponent implements OnInit {
     }
 
     this.calendar = newCalendar;
+  }
+
+  public isFieldValid(field: string) {
+    return !this.form.get(field)?.valid && this.form.get(field)?.touched;
   }
 }

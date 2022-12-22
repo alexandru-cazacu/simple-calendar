@@ -137,3 +137,9 @@ tr {
     visibility: hidden;
   }
 }
+
+.control-label.sc-required:after {
+  color: #d00;
+  content: "*";
+  margin-left: 5px;
+}

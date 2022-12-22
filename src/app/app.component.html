@@ -63,23 +63,32 @@
         </div>
         <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div class="sm:col-span-6">
-            <label for="event-name" class="block text-sm font-medium text-gray-700">Name</label>
+            <label for="event-name" class="block text-sm font-medium text-gray-700 control-label sc-required">Name</label>
             <div class="mt-1">
               <input formControlName="name" type="text" name="event-name" id="event-name" autocomplete="event-name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
             </div>
-          </div>
-
-          <div class="sm:col-span-3">
-            <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
-            <div class="mt-1">
-              <input formControlName="dateControl" id="date" name="date" type="date" autocomplete="date" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            <div *ngIf="isFieldValid('name')" class="mt-2 text-sm text-red-600">
+              Field is required.
             </div>
           </div>
 
           <div class="sm:col-span-3">
-            <label for="email" class="block text-sm font-medium text-gray-700">Color</label>
+            <label for="date" class="block text-sm font-medium text-gray-700 control-label sc-required">Date</label>
+            <div class="mt-1">
+              <input formControlName="dateControl" id="date" name="date" type="date" autocomplete="date" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            </div>
+            <div *ngIf="isFieldValid('dateControl')" class="mt-2 text-sm text-red-600">
+              Field is required.
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="email" class="block text-sm font-medium text-gray-700 control-label sc-required">Color</label>
             <div class="mt-1">
               <input formControlName="color" id="color" name="color" type="color" autocomplete="color" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+            </div>
+            <div *ngIf="isFieldValid('color')" class="mt-2 text-sm text-red-600">
+              Field is required.
             </div>
           </div>
         </div>
