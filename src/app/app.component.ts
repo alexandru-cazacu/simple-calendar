@@ -45,58 +45,95 @@ const MONTHS = {
   ],
 };
 
-const FIXED_HOLIDAYS = [
+const NON_WORKING_FIXED_HOLIDAYS = [
   {
     name: 'Capodanno',
     date: new Date('2023-01-01'),
+    isWorking: false,
   },
   {
     name: 'Epifania',
     date: new Date('2023-01-06'),
+    isWorking: false,
+  },
+  {
+    name: 'Mercoledì delle Ceneri',
+    date: new Date('2023-02-22'),
+    isWorking: true,
+  },
+  {
+    name: 'Festa del Papà',
+    date: new Date('2023-03-19'),
+    isWorking: true,
   },
   {
     name: 'Liberazione',
     date: new Date('2023-04-25'),
+    isWorking: false,
   },
   {
     name: 'Festa del Lavoro',
     date: new Date('2023-05-01'),
+    isWorking: false,
+  },
+  {
+    name: 'Festa della Mamma',
+    date: new Date('2023-05-14'),
+    isWorking: true,
   },
   {
     name: 'Festa della Repubblica',
     date: new Date('2023-06-02'),
+    isWorking: false,
   },
   {
     name: 'Ferragosto',
     date: new Date('2023-08-15'),
+    isWorking: false,
   },
   {
     name: 'Tutti i Santi',
     date: new Date('2023-11-01'),
+    isWorking: false,
   },
   {
     name: 'Immacolata',
     date: new Date('2023-12-08'),
+    isWorking: false,
   },
   {
     name: 'Natale',
     date: new Date('2023-12-25'),
+    isWorking: false,
   },
   {
     name: 'Santo Stefano',
     date: new Date('2023-12-26'),
+    isWorking: false,
+  },
+  {
+    name: 'San Silvestro',
+    date: new Date('2023-12-31'),
+    isWorking: true,
   },
 ];
 
 // TODO implement dynamic calculation
 const MOVING_HOLIDAYS = [
   {
+    name: 'Venerdi Santo',
+    date: new Date('2023-04-07'),
+    isWorking: true,
+  },
+  {
     name: 'Pasqua',
     date: new Date('2023-04-09'),
+    isWorking: false,
   },
   {
     name: 'Lunedì di Pasquetta',
     date: new Date('2023-04-10'),
+    isWorking: false,
   },
 ];
 
@@ -107,6 +144,7 @@ type Day = {
   holidayName?: string;
   otherMonth?: boolean;
   event?: CalendarEvent;
+  isWorking?: boolean;
 };
 
 type Month = {
@@ -252,14 +290,16 @@ export class AppComponent implements OnInit {
           }
 
           // Giorno festivo
-          const holiday = FIXED_HOLIDAYS.find((value) => this.isSameDate(value.date, date));
+          const holiday = NON_WORKING_FIXED_HOLIDAYS.find((value) => this.isSameDate(value.date, date));
           if (holiday) {
             day.holidayName = holiday.name;
+            day.isWorking = holiday.isWorking;
           }
 
           const movingHoliday = MOVING_HOLIDAYS.find((value) => this.isSameDate(value.date, date));
           if (movingHoliday) {
             day.holidayName = movingHoliday.name;
+            day.isWorking = movingHoliday.isWorking;
           }
 
           // Evento
