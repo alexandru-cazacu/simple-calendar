@@ -1,118 +1,91 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 
-interface CalendarEvent {
-  name: string;
-  color?: string;
-  date: Date;
-}
-
-const LANG = 'it';
-
-const DAYS = {
-  it: ['lun', 'mar', 'mer', 'gio', 'ven', 'sab', 'dom'],
-  en: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-};
-
-const MONTHS = {
-  it: [
-    'gennaio',
-    'febbraio',
-    'marzo',
-    'aprile',
-    'maggio',
-    'giugno',
-    'luglio',
-    'agosto',
-    'settembre',
-    'ottobre',
-    'novembre',
-    'dicembre',
-  ],
-  en: [
-    'january',
-    'february',
-    'march',
-    'april',
-    'may',
-    'june',
-    'july',
-    'august',
-    'september',
-    'october',
-    'november',
-    'december',
-  ],
-};
-
+const DAYS = ['days.mon', 'days.tue', 'days.wed', 'days.thu', 'days.fri', 'days.sat', 'days.sun'];
+const MONTHS = [
+  'months.january',
+  'months.february',
+  'months.march',
+  'months.april',
+  'months.may',
+  'months.june',
+  'months.july',
+  'months.august',
+  'months.september',
+  'months.october',
+  'months.november',
+  'months.december',
+];
 const FIXED_HOLIDAYS = [
   {
-    name: 'Capodanno',
+    name: 'events.it.capodanno',
     date: new Date('2023-01-01'),
     isWorking: false,
   },
   {
-    name: 'Epifania',
+    name: 'events.it.epifania',
     date: new Date('2023-01-06'),
     isWorking: false,
   },
   {
-    name: 'Festa del Donna',
+    name: 'events.it.festa_del_donna',
     date: new Date('2023-03-08'),
     isWorking: true,
   },
   {
-    name: 'Festa del Papà',
+    name: 'events.it.festa_del_pap',
     date: new Date('2023-03-19'),
     isWorking: true,
   },
   {
-    name: 'Liberazione',
+    name: 'events.it.liberazione',
     date: new Date('2023-04-25'),
     isWorking: false,
   },
   {
-    name: 'Festa del Lavoro',
+    name: 'events.it.festa_del_lavoro',
     date: new Date('2023-05-01'),
     isWorking: false,
   },
   {
-    name: 'Festa della Mamma',
+    name: 'events.it.festa_della_mamma',
     date: new Date('2023-05-08'),
     isWorking: true,
   },
   {
-    name: 'Festa della Repubblica',
+    name: 'events.it.festa_della_repubblica',
     date: new Date('2023-06-02'),
     isWorking: false,
   },
   {
-    name: 'Ferragosto',
+    name: 'events.it.ferragosto',
     date: new Date('2023-08-15'),
     isWorking: false,
   },
   {
-    name: 'Tutti i Santi',
+    name: 'events.it.tutti_i_santi',
     date: new Date('2023-11-01'),
     isWorking: false,
   },
   {
-    name: 'Immacolata',
+    name: 'events.it.immacolata',
     date: new Date('2023-12-08'),
     isWorking: false,
   },
   {
-    name: 'Natale',
+    name: 'events.it.natale',
     date: new Date('2023-12-25'),
     isWorking: false,
   },
   {
-    name: 'Santo Stefano',
+    name: 'events.it.santo_stefano',
     date: new Date('2023-12-26'),
     isWorking: false,
   },
   {
-    name: 'San Silvestro',
+    name: 'events.it.san_silvestro',
     date: new Date('2023-12-31'),
     isWorking: true,
   },
@@ -121,44 +94,50 @@ const FIXED_HOLIDAYS = [
 // TODO implement dynamic calculation
 const MOVING_HOLIDAYS = [
   {
-    name: 'Mercoledì delle Ceneri',
+    name: 'events.it.mercoledi_delle_ceneri',
     date: new Date('2022-03-02'),
     isWorking: true,
   },
   {
-    name: 'Mercoledì delle Ceneri',
+    name: 'events.it.mercoledi_delle_ceneri',
     date: new Date('2023-02-22'),
     isWorking: true,
   },
   {
-    name: 'Venerdi Santo',
+    name: 'events.it.venerdi_santo',
     date: new Date('2023-04-07'),
     isWorking: true,
   },
   {
-    name: 'Pasqua',
+    name: 'events.it.pasqua',
     date: new Date('2023-04-09'),
     isWorking: false,
   },
   {
-    name: 'Lunedì di Pasquetta',
+    name: 'events.it.lunedi_di_pasquetta',
     date: new Date('2023-04-10'),
     isWorking: false,
   },
 ];
 
+interface CalendarEvent {
+  name: string;
+  color?: string;
+  date: Date;
+}
+
 type Day = {
   number?: number;
   isSunday?: boolean;
   eventName?: string;
-  holidayName?: string;
+  holidayName: string;
   otherMonth?: boolean;
   event?: CalendarEvent;
   isWorking?: boolean;
 };
 
 type Month = {
-  name?: string;
+  name: string;
   rows: {
     cols: Day[];
   }[];
@@ -173,8 +152,8 @@ type Calendar = Array<Month>;
 })
 export class AppComponent implements OnInit {
   locale!: 'it' | 'en';
-  days = DAYS[this.locale];
-  months = MONTHS[this.locale];
+  days = DAYS;
+  months = MONTHS;
   initialDate!: Date;
 
   events: CalendarEvent[] = [];
@@ -182,7 +161,7 @@ export class AppComponent implements OnInit {
 
   form = new FormGroup({
     year: new FormControl<string>('2023', { nonNullable: true }),
-    language: new FormControl<'it' | 'en'>('it', { nonNullable: true }),
+    language: new FormControl<'it' | 'en'>('en', { nonNullable: true }),
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     dateControl: new FormControl<string>('', {
       nonNullable: true,
@@ -196,11 +175,14 @@ export class AppComponent implements OnInit {
 
   @ViewChild('pages') pages?: ElementRef<HTMLElement>;
 
-  constructor() {}
+  constructor(private translate: TranslateService, private clinent: HttpClient) {
+    this.translate.setDefaultLang('en');
+  }
 
   ngOnInit() {
     this.initialDate = new Date(this.form.controls.year.value);
     this.locale = this.form.controls.language.value;
+    this.translate.use(this.locale);
 
     this.restoreState();
     this.updateCalendar();
@@ -219,8 +201,7 @@ export class AppComponent implements OnInit {
       next: (newLanguage) => {
         if (newLanguage) {
           this.locale = newLanguage;
-          this.days = DAYS[this.locale];
-          this.months = MONTHS[this.locale];
+          this.translate.use(this.locale);
         }
       },
       error: (error) => {},
@@ -292,7 +273,7 @@ export class AppComponent implements OnInit {
 
     for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
       const month: Month = {
-        name: MONTHS['it'][monthIndex],
+        name: MONTHS[monthIndex],
         rows: [],
       };
 
@@ -309,7 +290,9 @@ export class AppComponent implements OnInit {
         });
 
         for (let colIndex = 0; colIndex < 7; colIndex++) {
-          const day: Day = {};
+          const day: Day = {
+            holidayName: ''
+          };
 
           const dayNumberInMonth = date.getDate(); // One based
 

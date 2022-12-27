@@ -1,0 +1,71 @@
+{
+  "days": {
+    "mon": "mon",
+    "tue": "tue",
+    "wed": "wed",
+    "thu": "thu",
+    "fri": "fri",
+    "sat": "sat",
+    "sun": "sun"
+  },
+  "months": {
+    "january": "january",
+    "february": "february",
+    "march": "march",
+    "april": "april",
+    "may": "may",
+    "june": "june",
+    "july": "july",
+    "august": "august",
+    "september": "september",
+    "october": "october",
+    "november": "november",
+    "december": "december"
+  },
+  "events": {
+    "it": {
+      "capodanno": "Capodanno",
+      "epifania": "Epifania",
+      "festa_del_donna": "Festa del Donna",
+      "festa_del_pap": "Festa del Papà",
+      "liberazione": "Liberazione",
+      "festa_del_lavoro": "Festa del Lavoro",
+      "festa_della_mamma": "Festa della Mamma",
+      "festa_della_repubblica": "Festa della Repubblica",
+      "ferragosto": "Ferragosto",
+      "tutti_i_santi": "Tutti i Santi",
+      "immacolata": "Immacolata",
+      "natale": "Natale",
+      "santo_stefano": "Santo Stefano",
+      "san_silvestro": "San Silvestro",
+      "mercoledi_delle_ceneri": "Mercoledì delle Ceneri",
+      "venerdi_santo": "Venerdi Santo",
+      "pasqua": "Pasqua",
+      "lunedi_di_pasquetta": "Lunedì di Pasquetta"
+    }
+  },
+  "button": {
+    "add_event": "Add Event",
+    "generate": "Generate",
+    "delete": "Delete"
+  },
+  "form": {
+    "options": "Options",
+    "events": "Events",
+    "add_event": "Add Event"
+  },
+  "field": {
+    "error": {
+      "required": "Field is required"
+    },
+    "year": "Year",
+    "language": "Language",
+    "name": "Name",
+    "date": "Date",
+    "color": "Color"
+  },
+  "language": {
+    "it": "Italian",
+    "en": "English"
+  }
+}

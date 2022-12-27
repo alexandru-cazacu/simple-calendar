@@ -25,3 +25,17 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+# TODO
+
+- [x] I18n
+- [ ] Handle overlapping events
+- [ ] Dinamically calculate Easter (Or precalculate it for the next n years 😄)
+- [ ] Update Events grid (style)
+- [ ] Add Holidays grid
+- [ ] Make 'Add event' a modal
+- [ ] Update color picker (style)
+
+# License
+
+This project is available under the permissive MIT license. For more info check the [LICENSE](https://github.com/alexandru-cazacu/jirello/blob/master/LICENSE).

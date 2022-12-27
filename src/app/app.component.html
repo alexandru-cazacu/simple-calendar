@@ -3,12 +3,16 @@
     <div class="space-y-8 divide-y divide-gray-200">
       <div>
         <div>
-          <h3 class="text-lg font-medium leading-6 text-gray-900">Options</h3>
+          <h3 class="text-lg font-medium leading-6 text-gray-900">
+            {{ "form.options" | translate }}
+          </h3>
         </div>
 
         <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div class="sm:col-span-2">
-            <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
+            <label for="year" class="block text-sm font-medium text-gray-700">
+              {{ "field.year" | translate }}
+            </label>
             <div class="mt-1">
               <select
                 [formControlName]="'year'"
@@ -24,7 +28,9 @@
           </div>
 
           <div class="sm:col-span-2">
-            <label for="language" class="block text-sm font-medium text-gray-700">Language</label>
+            <label for="language" class="block text-sm font-medium text-gray-700">
+              {{ "field.language" | translate }}
+            </label>
             <div class="mt-1">
               <select
                 [formControlName]="'language'"
@@ -33,8 +39,8 @@
                 autocomplete="language"
                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
               >
-                <option value="en">English</option>
-                <option value="it">Italian</option>
+                <option value="en">{{ "language.en" | translate }}</option>
+                <option value="it">{{ "language.it" | translate }}</option>
               </select>
             </div>
           </div>
@@ -43,7 +49,9 @@
 
       <div class="pt-8">
         <div>
-          <h3 class="text-lg font-medium leading-6 text-gray-900">Events</h3>
+          <h3 class="text-lg font-medium leading-6 text-gray-900">
+            {{ "form.events" | translate }}
+          </h3>
         </div>
         <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <ul id="events" class="sm:col-span-6">
@@ -62,7 +70,7 @@
                   [ngStyle]="{ 'background-color': event.color }"
                   class="rounded-full w-4 h-4"
                 ></span>
-                <button (click)="deleteEvent(i)">Delete</button>
+                <button (click)="deleteEvent(i)">{{ "button.delete" | translate }}</button>
               </div>
             </li>
           </ul>
@@ -71,15 +79,18 @@
 
       <div class="pt-8">
         <div>
-          <h3 class="text-lg font-medium leading-6 text-gray-900">Add Event</h3>
+          <h3 class="text-lg font-medium leading-6 text-gray-900">
+            {{ "form.add_event" | translate }}
+          </h3>
         </div>
         <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
           <div class="sm:col-span-6">
             <label
               for="event-name"
               class="block text-sm font-medium text-gray-700 control-label sc-required"
-              >Name</label
             >
+              {{ "field.name" | translate }}
+            </label>
             <div class="mt-1">
               <input
                 formControlName="name"
@@ -91,7 +102,7 @@
               />
             </div>
             <div *ngIf="isFieldValid('name')" class="mt-2 text-sm text-red-600">
-              Field is required.
+              {{ "field.required" | translate }}
             </div>
           </div>
 
@@ -99,8 +110,9 @@
             <label
               for="date"
               class="block text-sm font-medium text-gray-700 control-label sc-required"
-              >Date</label
             >
+              {{ "field.date" | translate }}
+            </label>
             <div class="mt-1">
               <input
                 formControlName="dateControl"
@@ -112,7 +124,7 @@
               />
             </div>
             <div *ngIf="isFieldValid('dateControl')" class="mt-2 text-sm text-red-600">
-              Field is required.
+              {{ "field.error.required" | translate }}
             </div>
           </div>
 
@@ -120,8 +132,9 @@
             <label
               for="email"
               class="block text-sm font-medium text-gray-700 control-label sc-required"
-              >Color</label
             >
+              {{ "field.color" | translate }}
+            </label>
             <div class="mt-1">
               <input
                 formControlName="color"
@@ -133,7 +146,7 @@
               />
             </div>
             <div *ngIf="isFieldValid('color')" class="mt-2 text-sm text-red-600">
-              Field is required.
+              {{ "field.error.required" | translate }}
             </div>
           </div>
         </div>
@@ -147,14 +160,14 @@
           type="button"
           class="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
-          Add Event
+          {{ "button.add_event" | translate }}
         </button>
         <button
           (click)="print()"
           type="submit"
           class="ml-3 inline-flex justify-center rounded-md border border-transparent bg-primary-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
-          Generate
+          {{ "button.generate" | translate }}
         </button>
       </div>
     </div>
@@ -163,13 +176,13 @@
 
 <section class="sheet" *ngFor="let month of calendar">
   <div class="month-container">
-    <span class="month-name">{{ month.name }}</span>
+    <span class="month-name">{{ month.name | translate }}</span>
     <span class="year">{{ initialDate.getFullYear() }}</span>
 
     <table [cellSpacing]="0" class="month">
       <tbody>
         <tr>
-          <td *ngFor="let day of days">{{ day }}</td>
+          <td *ngFor="let day of days">{{ day | translate }}</td>
         </tr>
         <tr *ngFor="let row of month.rows">
           <td
@@ -180,17 +193,19 @@
             <span
               *ngIf="!col.otherMonth"
               [class.green]="col.eventName"
-              [class.red]="col.isSunday || col.holidayName && !col.isWorking"
-              [class.event-day]="col.isSunday || col.eventName || col.holidayName && !col.isWorking"
+              [class.red]="col.isSunday || (col.holidayName && !col.isWorking)"
+              [class.event-day]="
+                col.isSunday || col.eventName || (col.holidayName && !col.isWorking)
+              "
               [style.background-color]="col.event?.color"
             >
               {{ col.number }}
             </span>
-            <span *ngIf="col.otherMonth">
-              {{ col.number }}
-            </span>
+            <span *ngIf="col.otherMonth">{{ col.number }}</span>
             <span class="event-label" *ngIf="!col.otherMonth">{{ col.eventName }}</span>
-            <span class="event-label" *ngIf="!col.otherMonth">{{ col.holidayName }}</span>
+            <span class="event-label" *ngIf="!col.otherMonth">{{
+              col.holidayName | translate
+            }}</span>
           </td>
         </tr>
       </tbody>
