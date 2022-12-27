@@ -45,7 +45,7 @@ const MONTHS = {
   ],
 };
 
-const NON_WORKING_FIXED_HOLIDAYS = [
+const FIXED_HOLIDAYS = [
   {
     name: 'Capodanno',
     date: new Date('2023-01-01'),
@@ -57,8 +57,8 @@ const NON_WORKING_FIXED_HOLIDAYS = [
     isWorking: false,
   },
   {
-    name: 'Mercoledì delle Ceneri',
-    date: new Date('2023-02-22'),
+    name: 'Festa del Donna',
+    date: new Date('2023-03-08'),
     isWorking: true,
   },
   {
@@ -78,7 +78,7 @@ const NON_WORKING_FIXED_HOLIDAYS = [
   },
   {
     name: 'Festa della Mamma',
-    date: new Date('2023-05-14'),
+    date: new Date('2023-05-08'),
     isWorking: true,
   },
   {
@@ -121,6 +121,16 @@ const NON_WORKING_FIXED_HOLIDAYS = [
 // TODO implement dynamic calculation
 const MOVING_HOLIDAYS = [
   {
+    name: 'Mercoledì delle Ceneri',
+    date: new Date('2022-03-02'),
+    isWorking: true,
+  },
+  {
+    name: 'Mercoledì delle Ceneri',
+    date: new Date('2023-02-22'),
+    isWorking: true,
+  },
+  {
     name: 'Venerdi Santo',
     date: new Date('2023-04-07'),
     isWorking: true,
@@ -162,15 +172,17 @@ type Calendar = Array<Month>;
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  locale = 'it';
-  days = DAYS['it'];
-  months = MONTHS['it'];
-  initialDate: Date = new Date(`01/01/2023`);
+  locale!: 'it' | 'en';
+  days = DAYS[this.locale];
+  months = MONTHS[this.locale];
+  initialDate!: Date;
 
   events: CalendarEvent[] = [];
   calendar: Calendar = [];
 
   form = new FormGroup({
+    year: new FormControl<string>('2023', { nonNullable: true }),
+    language: new FormControl<'it' | 'en'>('it', { nonNullable: true }),
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     dateControl: new FormControl<string>('', {
       nonNullable: true,
@@ -187,10 +199,32 @@ export class AppComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.initialDate = new Date(`01/01/2023`);
+    this.initialDate = new Date(this.form.controls.year.value);
+    this.locale = this.form.controls.language.value;
 
     this.restoreState();
     this.updateCalendar();
+
+    this.form.controls.year.valueChanges.subscribe({
+      next: (newYear) => {
+        if (newYear) {
+          this.initialDate = new Date(newYear);
+          this.updateCalendar();
+        }
+      },
+      error: (error) => {},
+    });
+
+    this.form.controls.language.valueChanges.subscribe({
+      next: (newLanguage) => {
+        if (newLanguage) {
+          this.locale = newLanguage;
+          this.days = DAYS[this.locale];
+          this.months = MONTHS[this.locale];
+        }
+      },
+      error: (error) => {},
+    });
   }
 
   private isSameDate(first: Date, second: Date) {
@@ -207,8 +241,6 @@ export class AppComponent implements OnInit {
 
   public print() {
     window.print();
-
-    // this.printElem();
   }
 
   public addEvent() {
@@ -290,7 +322,7 @@ export class AppComponent implements OnInit {
           }
 
           // Giorno festivo
-          const holiday = NON_WORKING_FIXED_HOLIDAYS.find((value) => this.isSameDate(value.date, date));
+          const holiday = FIXED_HOLIDAYS.find((value) => this.isSameDayMonth(value.date, date));
           if (holiday) {
             day.holidayName = holiday.name;
             day.isWorking = holiday.isWorking;
@@ -326,32 +358,5 @@ export class AppComponent implements OnInit {
 
   public isFieldValid(field: string) {
     return !this.form.get(field)?.valid && this.form.get(field)?.touched;
-  }
-
-  public printElem() {
-    const mywindow = window.open('', 'PRINT');
-
-    mywindow?.document.write(`<html><head><title>${document.title}</title>`);
-    mywindow?.document.write('<link rel="stylesheet" href="styles.css">');
-    mywindow?.document.write('</head><body class="A4">');
-    mywindow?.document.write(this.pages?.nativeElement.innerHTML || '');
-    mywindow?.document.write(`<style>@page { size: A4 }
-      @page {
-        size: A4;
-        margin: 0;
-      }
-      body {
-        min-width: initial !important;
-      }
-    </style>`);
-    mywindow?.document.write('</body></html>');
-
-    mywindow?.document.close(); // necessary for IE >= 10
-    mywindow?.focus(); // necessary for IE >= 10*/
-
-    mywindow?.print();
-    // mywindow?.close();
-
-    return true;
   }
 }
