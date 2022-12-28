@@ -51,7 +51,7 @@ const FIXED_HOLIDAYS = [
   },
   {
     name: 'events.it.festa_della_mamma',
-    date: new Date('2023-05-08'),
+    date: new Date('2023-05-14'),
     isWorking: true,
   },
   {
