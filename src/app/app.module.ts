@@ -20,7 +20,7 @@ export class TranslateHttpLoader implements TranslateLoader {
    * Gets the translations from the server
    */
   public getTranslation(lang: string): Observable<Object> {
-    return this.http.get(`${this.prefix}${lang}${this.suffix}`);
+    return this.http.get(`${window.location.href}${this.prefix}${lang}${this.suffix}`);
   }
 }
 
