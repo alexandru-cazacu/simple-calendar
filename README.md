@@ -1,3 +1,5 @@
+[![CI](https://github.com/alexandru-cazacu/simple-calendar/actions/workflows/ci.yml/badge.svg)](https://github.com/alexandru-cazacu/simple-calendar/actions/workflows/ci.yml)
+
 # simple-calendar
 
 Generate a minimalist, customizable, print-ready calendar.
@@ -22,7 +24,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 - [x] I18n
 - [ ] Handle overlapping events
-- [ ] Dinamically calculate Easter (Or precalculate it for the next n years 😄)
+- [ ] Dinamically calculate Easter (Or precalculate it for the next n years)
 - [ ] Update Events grid (style)
 - [ ] Add Holidays grid
 - [ ] Make 'Add event' a modal
