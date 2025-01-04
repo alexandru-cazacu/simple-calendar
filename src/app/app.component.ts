@@ -93,11 +93,7 @@ const FIXED_HOLIDAYS = [
 
 // TODO implement dynamic calculation
 const MOVING_HOLIDAYS = [
-  {
-    name: 'events.it.mercoledi_delle_ceneri',
-    date: new Date('2022-03-02'),
-    isWorking: true,
-  },
+  // 2023
   {
     name: 'events.it.mercoledi_delle_ceneri',
     date: new Date('2023-02-22'),
@@ -116,6 +112,27 @@ const MOVING_HOLIDAYS = [
   {
     name: 'events.it.lunedi_di_pasquetta',
     date: new Date('2023-04-10'),
+    isWorking: false,
+  },
+  // 2025
+  {
+    name: 'events.it.mercoledi_delle_ceneri',
+    date: new Date('2025-03-05'),
+    isWorking: true,
+  },
+  {
+    name: 'events.it.venerdi_santo',
+    date: new Date('2025-04-18'),
+    isWorking: true,
+  },
+  {
+    name: 'events.it.pasqua',
+    date: new Date('2025-04-20'),
+    isWorking: false,
+  },
+  {
+    name: 'events.it.lunedi_di_pasquetta',
+    date: new Date('2025-04-21'),
     isWorking: false,
   },
 ];
@@ -160,7 +177,7 @@ export class AppComponent implements OnInit {
   calendar: Calendar = [];
 
   form = new FormGroup({
-    year: new FormControl<string>('2023', { nonNullable: true }),
+    year: new FormControl<string>(new Date().getFullYear().toString(), { nonNullable: true }),
     language: new FormControl<'it' | 'en'>('en', { nonNullable: true }),
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     dateControl: new FormControl<string>('', {
